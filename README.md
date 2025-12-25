@@ -19,6 +19,8 @@
 提供校園停車位管理、自動車牌辨識、學生/教職員車位控管與違規偵測，提高校園交通效率與安全性。
 
 ---
+<img width="2533" height="3937" alt="NotebookLM Mind Map" src="https://github.com/user-attachments/assets/4c490c44-a182-45e2-8067-e1a3c3ffb784" />
+
 
 ## 🚀 系統功能 Features
 
@@ -172,7 +174,6 @@ CampusParkingSystem/
 ```
 
 
-<img width="2533" height="3937" alt="NotebookLM Mind Map" src="https://github.com/user-attachments/assets/4c490c44-a182-45e2-8067-e1a3c3ffb784" />
 
 
 
