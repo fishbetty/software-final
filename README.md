@@ -113,22 +113,6 @@ A2 --> I4
 
 
 
-
-
-# 🏗️ 系統架構 System Architecture
-
-```mermaid
-flowchart LR
-    A[車牌辨識攝影機] --> B[邊緣運算 YOLO/ANPR]
-    B --> C[後端 API Server]
-    C --> D[(資料庫)]
-    C <---> E[Web 管理後台]
-    C <---> F[行動 App / Webapp]
-    C --> G[通知系統 LINE/Email]
-```
-
----
-
 # 🧩 技術堆疊 Tech Stack
 
 | 領域 | 技術選項 |
@@ -282,9 +266,7 @@ CampusParkingSystem/
 
 
 
-## 📌 進階功能詳細說明
 
----
 
 ## 🔁 系統整體流程圖
 
