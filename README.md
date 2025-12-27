@@ -355,7 +355,7 @@ Data Layer：統一管理資料庫，存放車位、車輛、使用者及違規�
 
 #  🧩 應用技術 / Tech Stack
 
-```
+
 | 領域 / Area                              | 技術 / Technology                             | 說明 / Description                                             |
 | -------------------------------------- | ------------------------------------------- | ------------------------------------------------------------ |
 | 前端 / Frontend                          | React / Vue / Flutter Web                   | 用於手機與 Web 界面開發 / Mobile & Web interface development          |
@@ -367,7 +367,7 @@ Data Layer：統一管理資料庫，存放車位、車輛、使用者及違規�
 | 部署 / Deployment                        | Docker + Kubernetes / Nginx                 | 容器化部署與負載管理 / Containerized deployment & load management      |
 | 感測器 / IoT Sensors                      | 地磁 / 超音波 / 閘門控制器                            | 偵測停車位與閘門開關 / Detect parking slot occupancy & gate control    |
 ---
-```
+
 # 📎 專案目錄
 ```bash
 CampusParking/
