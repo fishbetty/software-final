@@ -366,8 +366,7 @@ Data Layer：統一管理資料庫，存放車位、車輛、使用者及違規�
 | 通知 / Notification                      | LINE Notify / Firebase Cloud Messaging      | 事件通知、警示 / Event notifications & alerts                       |
 | 部署 / Deployment                        | Docker + Kubernetes / Nginx                 | 容器化部署與負載管理 / Containerized deployment & load management      |
 | 感測器 / IoT Sensors                      | 地磁 / 超音波 / 閘門控制器                            | 偵測停車位與閘門開關 / Detect parking slot occupancy & gate control    |
-
-
+---
 ```
 # 📎 專案目錄
 ```bash
