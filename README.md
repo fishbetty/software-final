@@ -51,6 +51,16 @@ flowchart LR
     C --> G[通知系統 LINE/Email]
 ```
 
+
+flowchart TB
+    CamAI[AI 偵測攝影機/邊緣運算] -->|辨識結果| APIServer[Backend API Server]
+    Sensor[壓力/超音波感測器] --> APIServer
+    App[手機 App / Web] <-->|REST/HTTPS| APIServer
+    Admin[管理後台] <-->|RBAC| APIServer
+    APIServer --> DB[(SQL/Redis)]
+    APIServer --> Notify[LINE / Email 通知]
+    APIServer --> Gate[閘門控制裝置]
+
 ---
 
 ## 🧩 技術堆疊 Tech Stack
