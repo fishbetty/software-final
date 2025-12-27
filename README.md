@@ -20,10 +20,6 @@
 
 
 ---
-<img width="2533" height="3937" alt="NotebookLM Mind Map" src="https://github.com/user-attachments/assets/4c490c44-a182-45e2-8067-e1a3c3ffb784" />
-
-
-
 
 # 🚀 系統功能 Features
 
@@ -183,7 +179,45 @@ T --> END[結束流程]
 ## 📂 資料庫 ER Model 
 
 ```
- <img width="4316" height="4071" alt="Untitled diagram-2025-12-27-163734" src="https://github.com/user-attachments/assets/7f6d0aca-6a12-45ed-838d-38dc198631c6" />
+erDiagram
+    USER ||--o{ VEHICLE : "擁有"
+    VEHICLE ||--o{ PARKING_LOG : "進出紀錄"
+    PARKING_SLOT ||--o{ PARKING_LOG : "使用"
+    VEHICLE ||--o{ VIOLATION : "違規紀錄"
+
+    USER {
+        string user_id PK
+        string name
+        enum role "教職員/學生/訪客"
+    }
+
+    VEHICLE {
+        string plate PK
+        string user_id FK
+        boolean is_disabled "是否身障車"
+    }
+
+    PARKING_SLOT {
+        int slot_id PK
+        enum type "一般/身障/電動"
+        enum status "空位/佔用/預約"
+    }
+
+    PARKING_LOG {
+        int log_id PK
+        string plate FK
+        int slot_id FK
+        datetime in_time
+        datetime out_time
+        decimal fee "停車費用"
+    }
+
+    VIOLATION {
+        int violation_id PK
+        string plate FK
+        string photo_url "違規證據圖"
+        string reason "如：佔用身障位"
+    }
 
 ```
 
