@@ -20,6 +20,8 @@
 
 
 ---
+<img width="2412" height="2336" alt="NotebookLM Mind Map (1)" src="https://github.com/user-attachments/assets/81bdde5c-c795-4d1a-bd16-ba7af4cad3c8" />
+
 
 # 🚀 系統功能 Features
 
@@ -352,6 +354,18 @@ flowchart TB
     APIServer --> Notify[LINE / Email 通知]
     APIServer --> Gate[閘門控制裝置]
 ```
+
+# 🧩 應用技術 / Tech Stack
+| 領域 / Area                              | 技術 / Technology                             | 說明 / Description                                             |
+| -------------------------------------- | ------------------------------------------- | ------------------------------------------------------------ |
+| 前端 / Frontend                          | React / Vue / Flutter Web                   | 用於手機與 Web 界面開發 / Mobile & Web interface development          |
+| 後端 / Backend                           | Node.js / Python FastAPI / Java Spring Boot | API 與業務邏輯 / API & Business logic                             |
+| AI 車牌辨識 / AI License Plate Recognition | YOLOv8 + EasyOCR / OpenALPR                 | 即時車牌辨識模型 / Real-time license plate recognition models        |
+| 資料庫 / Database                         | MySQL / PostgreSQL + Redis                  | 存放車位、車輛、使用者資料 / Stores parking slots, vehicle, and user data |
+| 邊緣運算 / Edge Device                     | NVIDIA Jetson / 樹莓派 + USB Camera            | 用於攝影機影像分析 / For camera image processing                      |
+| 通知 / Notification                      | LINE Notify / Firebase Cloud Messaging      | 事件通知、警示 / Event notifications & alerts                       |
+| 部署 / Deployment                        | Docker + Kubernetes / Nginx                 | 容器化部署與負載管理 / Containerized deployment & load management      |
+| 感測器 / IoT Sensors                      | 地磁 / 超音波 / 閘門控制器                            | 偵測停車位與閘門開關 / Detect parking slot occupancy & gate control    |
 
 
 ---
