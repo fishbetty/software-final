@@ -69,57 +69,7 @@ flowchart LR
 
 ## 📌 主要流程 System Workflow
 
-### 1️⃣ 車輛入場流程
-```mermaid
-sequenceDiagram
-Car ->> Camera: 車輛靠近，拍攝照片
-Camera ->> AI: 車牌辨識
-AI ->> Backend: 傳送車牌結果
-Backend ->> DB: 查核身份、車位狀態
-Backend -->> Gate: 開閘 / 警示
-Backend -->> Log: 紀錄入場時刻
-```
 
-### 2️⃣ 車位佔用偵測
-- Ultrasonic Sensor / Camera AI
-- 偵測異常即回報後台
-
-### 3️⃣ 違規處理流程
-- 未註冊車牌 → 自動記錄並通知管理員
-- 重複占位或超時 → 系統警告
-
----
-
-## 📂 資料庫 ER Model (簡化版)
-
-```mermaid
-erDiagram
-    VEHICLE {
-        string plate PK
-        string ownerID
-        string role
-    }
-    PARKINGLOG {
-        int id PK
-        string plate FK
-        datetime inTime
-        datetime outTime
-    }
-    PARKINGSPACE {
-        int spaceID PK
-        string status
-    }
-    USER {
-        string userID PK
-        string name
-        string role
-    }
-    USER ||--|{ VEHICLE : "擁有"
-    VEHICLE ||--|{ PARKINGLOG : "入場紀錄"
-    PARKINGSPACE ||--|{ PARKINGLOG : "佔用"
-```
-
----
 
 ## 📦 功能模組分工 (開發任務)
 
