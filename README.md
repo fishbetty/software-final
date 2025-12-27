@@ -125,7 +125,7 @@ T --> END[結束流程]
 
 ---
 
-# 📂 資料庫 ER Model 
+# 📂 流程
 
 ```mermaid
 graph LR
@@ -192,6 +192,37 @@ A2 --> I4
 ---
 
 
+
+## 📂 資料庫 ER Model (簡化版)
+
+```mermaid
+erDiagram
+    VEHICLE {
+        string plate PK
+        string ownerID
+        string role
+    }
+    PARKINGLOG {
+        int id PK
+        string plate FK
+        datetime inTime
+        datetime outTime
+    }
+    PARKINGSPACE {
+        int spaceID PK
+        string status
+    }
+    USER {
+        string userID PK
+        string name
+        string role
+    }
+    USER ||--|{ VEHICLE : "擁有"
+    VEHICLE ||--|{ PARKINGLOG : "入場紀錄"
+    PARKINGSPACE ||--|{ PARKINGLOG : "佔用"
+```
+
+
 ## 📦 功能模組分工 (開發任務)
 
 | 模組 | 工作項目 |
@@ -247,34 +278,6 @@ CampusParkingSystem/
 
 
 
-## 📂 資料庫 ER Model (簡化版)
-
-```mermaid
-erDiagram
-    VEHICLE {
-        string plate PK
-        string ownerID
-        string role
-    }
-    PARKINGLOG {
-        int id PK
-        string plate FK
-        datetime inTime
-        datetime outTime
-    }
-    PARKINGSPACE {
-        int spaceID PK
-        string status
-    }
-    USER {
-        string userID PK
-        string name
-        string role
-    }
-    USER ||--|{ VEHICLE : "擁有"
-    VEHICLE ||--|{ PARKINGLOG : "入場紀錄"
-    PARKINGSPACE ||--|{ PARKINGLOG : "佔用"
-```
 
 ## 📌 進階功能詳細說明
 
