@@ -250,68 +250,31 @@ CampusParkingSystem/
 ## 📂 資料庫 ER Model (簡化版)
 
 ```mermaid
-graph LR
-
-subgraph ClientLayer[使用者端 / Client Layer]
-    U1[手機 App]
-    U2[Web 介面]
-    U3[管理後台系統]
-end
-
-subgraph APILayer[後端應用服務層 / API & Service Layer]
-    A1[身份驗證服務 Auth Service]
-    A2[停車管理服務 Parking Service]
-    A3[車牌辨識服務 OCR Service]
-    A4[資料同步服務 Data Sync Service]
-end
-
-subgraph DomainLayer[商業邏輯 / Domain Layer]
-    D1[車輛進出邏輯 VehicleRecord]
-    D2[停車格管理 Slot Management]
-    D3[費率計算 Fee Policy]
-end
-
-subgraph IoTLayer[感測層 / IoT & Edge Layer]
-    I1[地磁感測器]
-    I2[超音波感測器]
-    I3[影像辨識相機]
-    I4[閘門控制器]
-end
-
-subgraph DataLayer[資料層 / Entity & DB]
-    DB1[(停車區資料 ParkingSlots DB)]
-    DB2[(車輛紀錄資料 VehicleRecords DB)]
-    DB3[(使用者 & 權限 Users DB)]
-end
-
-%% Client <-> API
-U1 -->|REST API / WebSocket| APILayer
-U2 -->|REST API| APILayer
-U3 -->|管理控制 & 報表| APILayer
-
-%% API to DB
-APILayer -->|CRUD| DataLayer
-
-%% Service to Domain Logic
-APILayer --> DomainLayer
-
-%% IoT reporting
-IoTLayer -->|MQTT/WebSocket| A4
-
-%% Parking logic
-A2 --> D2
-A2 --> D1
-A2 --> D3
-
-%% OCR interaction
-A3 --> I3
-
-%% Gate signals
-A2 --> I4
-
+erDiagram
+    VEHICLE {
+        string plate PK
+        string ownerID
+        string role
+    }
+    PARKINGLOG {
+        int id PK
+        string plate FK
+        datetime inTime
+        datetime outTime
+    }
+    PARKINGSPACE {
+        int spaceID PK
+        string status
+    }
+    USER {
+        string userID PK
+        string name
+        string role
+    }
+    USER ||--|{ VEHICLE : "擁有"
+    VEHICLE ||--|{ PARKINGLOG : "入場紀錄"
+    PARKINGSPACE ||--|{ PARKINGLOG : "佔用"
 ```
-
----
 
 ## 📌 進階功能詳細說明
 
@@ -407,40 +370,7 @@ flowchart TD
 
 ---
 
-## 🧭 更多流程與架構圖
 
----
-
-### 🔹 車位預約詳細流程圖（使用者視角）
-
-```mermaid
-sequenceDiagram
-    participant U as 使用者
-    participant App as Web/App
-    participant BE as Backend
-    participant DB as Database
-    participant Gate as 閘門
-
-    U ->> App: 查詢剩餘車位
-    App ->> BE: 請求車位狀態
-    BE ->> DB: 讀取車位資訊
-    DB -->> BE: 車位狀態回傳
-    BE -->> App: 顯示可預約車位
-
-    U ->> App: 預約停車位
-    App ->> BE: 提交預約
-    BE ->> DB: 儲存預約紀錄
-    DB -->> BE: 回傳成功
-    BE -->> U: 顯示 QR/通知提醒
-
-    U ->> Gate: 抵達校園掃描QR
-    Gate ->> BE: 驗證預約資訊
-    BE ->> DB: 查詢預約狀態
-    DB -->> BE: 驗證通過
-    BE -->> Gate: 開閘放行
-```
-
----
 
 ### 🔹 QR 訪客驗證審核流程
 
@@ -484,4 +414,3 @@ flowchart TB
     APIServer --> Notify[LINE / Email 通知]
     APIServer --> Gate[閘門控制裝置]
 ```
-
