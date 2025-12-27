@@ -23,31 +23,6 @@
 <img width="2533" height="3937" alt="NotebookLM Mind Map" src="https://github.com/user-attachments/assets/4c490c44-a182-45e2-8067-e1a3c3ffb784" />
 
 
-SmartCampusParking/
-├─ src/
-│   ├─ Parking.Api/                   # Web API 層
-│   │     ├─ Controllers/
-│   │     └─ Program.cs
-│   │
-│   ├─ Parking.Application/           # Application / Service 層
-│   │     ├─ Interfaces/
-│   │     └─ Services/
-│   │
-│   ├─ Parking.Domain/                # Domain Model
-│   │     ├─ Entities/
-│   │     └─ ValueObjects/
-│   │
-│   ├─ Parking.Infrastructure/        # Repository + DB
-│   │     ├─ DbContexts/
-│   │     ├─ Configurations/
-│   │     └─ Repositories/
-│   │
-│   └─ Parking.IoT/                   # 感測器/邊緣設備接收層
-│
-└─ docs/
-     ├─ UML/
-     ├─ 架構圖/
-     └─ 設計說明/
 
 
 ## 🚀 系統功能 Features
@@ -165,3 +140,41 @@ CampusParkingSystem/
 
 
 
+
+
+
+
+
+
+
+# 🅿️ 校園停車場管理系統 Campus Parking Management System
+
+🎯 **目標** 提供校園停車位管理、自動車牌辨識、學生/教職員車位控管與違規偵測，透過 **Raspberry Pi 邊緣運算** 提升校園交通效率與安全性。
+
+---
+
+## 🚀 系統功能 Features
+
+| 模組 | 內容 |
+|------|------|
+| **車位預約系統** | 進場前透過 App 預約車位、保留時間控管 |
+| **QR Code 訪客驗證** | 訪客線上申請、產出 QR Gate 驗證通行 |
+| **影像違規蒐證** | 自動偵測佔用障礙者車位、電動車位並截圖存證 |
+| **車輛身份辨識** | 邊緣端 YOLOv8 + EasyOCR 高效率車牌辨識 |
+| **停車位管理** | 使用超音波感測器即時監控停車格狀態 |
+| **許可證控管** | 教職員、學生、訪客權限分級與黑名單管理 |
+
+---
+
+## 🏗️ 系統架構 System Architecture
+
+
+
+```mermaid
+flowchart LR
+    A[PiCam 攝影機] --> B[邊緣運算 YOLOv8/OCR]
+    B --> C[後端 FastAPI Server]
+    C --> D[(PostgreSQL 資料庫)]
+    C <---> E[Web 管理後台]
+    C <---> F[行動 App / Webapp]
+    C --> G[通知系統 LINE Notify]
