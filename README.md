@@ -4,19 +4,50 @@
 # 🅿️ 校園停車場管理系統 Campus Parking Management System
 
 目標:提供校園停車位管理、自動車牌辨識、學生/教職員車位控管與違規偵測，提高校園交通效率與安全性。
+採用前後端分離架構、支援自動停車位監測、進出管控、車牌辨識、空位引導與後台管理等功能。適用於校園環境下安全且高效的停車管理。
 
-## 校園停車常見問題問題包括：
+# 專案特色
 
-效率低下：進出校園需人工核對停車證，導致尖峰時段大門塞車。
+停車位即時狀態監測
 
-資訊不透明：學生與教職員無法即時得知哪區停車場還有空位。
+車牌辨識進出紀錄與停車計費
 
-管理漏洞：外來車輛違規停放、車位超量佔用。
-🎯 **目標**  
-提供校園停車位管理、自動車牌辨識、學生/教職員車位控管與違規偵測，提高校園交通效率與安全性。
+校園內導航空位引導系統
+
+後台管理停車資料、權限與報表
+
+行動裝置／Web UI 查詢與操作
+
 
 ---
 <img width="2533" height="3937" alt="NotebookLM Mind Map" src="https://github.com/user-attachments/assets/4c490c44-a182-45e2-8067-e1a3c3ffb784" />
+
+
+SmartCampusParking/
+├─ src/
+│   ├─ Parking.Api/                   # Web API 層
+│   │     ├─ Controllers/
+│   │     └─ Program.cs
+│   │
+│   ├─ Parking.Application/           # Application / Service 層
+│   │     ├─ Interfaces/
+│   │     └─ Services/
+│   │
+│   ├─ Parking.Domain/                # Domain Model
+│   │     ├─ Entities/
+│   │     └─ ValueObjects/
+│   │
+│   ├─ Parking.Infrastructure/        # Repository + DB
+│   │     ├─ DbContexts/
+│   │     ├─ Configurations/
+│   │     └─ Repositories/
+│   │
+│   └─ Parking.IoT/                   # 感測器/邊緣設備接收層
+│
+└─ docs/
+     ├─ UML/
+     ├─ 架構圖/
+     └─ 設計說明/
 
 
 ## 🚀 系統功能 Features
