@@ -51,7 +51,7 @@ flowchart LR
     C --> G[通知系統 LINE/Email]
 ```
 
-
+```mermaid
 flowchart TB
     CamAI[AI 偵測攝影機/邊緣運算] -->|辨識結果| APIServer[Backend API Server]
     Sensor[壓力/超音波感測器] --> APIServer
