@@ -1,4 +1,4 @@
-## 軟體工程期末報告 11224213林巧芝 11224216林品妤
+### 軟體工程期末報告 11224213林巧芝 11224216林品妤
 
 
 # 🅿️ 校園停車場管理系統 Campus Parking Management System
@@ -45,7 +45,7 @@
 
 ---
 
-#🧱 整體系統架構圖（System Architecture Diagram）
+# 🧱 整體系統架構圖（System Architecture Diagram）
 
 ```mermaid
 graph LR
@@ -184,29 +184,102 @@ T --> END[結束流程]
 
 ```mermaid
 erDiagram
-    VEHICLE {
-        string plate PK
-        string ownerID
-        string role
-    }
-    PARKINGLOG {
-        int id PK
-        string plate FK
-        datetime inTime
-        datetime outTime
-    }
-    PARKINGSPACE {
-        int spaceID PK
-        string status
-    }
+    USER ||--o{ VEHICLE : "owns"
+    USER ||--o{ RESERVATION : "makes"
+    USER ||--o{ VISITOR_PASS : "applies_for"
+    
+    VEHICLE ||--o{ PARKING_LOG : "generates"
+    VEHICLE ||--o{ VIOLATION : "commits"
+    
+    PARKING_SLOT ||--o{ PARKING_LOG : "records"
+    PARKING_SLOT ||--o{ RESERVATION : "is_booked"
+    PARKING_SLOT ||--o1 IOT_SENSOR : "monitored_by"
+    
+    PARKING_LOG ||--o1 PAYMENT : "settles"
+    PARKING_LOG ||--o{ VIOLATION : "logs"
+
     USER {
-        string userID PK
+        string user_id PK
         string name
-        string role
+        string email
+        string password_hash
+        enum role "Admin, Staff, Student, Visitor"
+        decimal balance "預付卡餘額"
     }
-    USER ||--|{ VEHICLE : "擁有"
-    VEHICLE ||--|{ PARKINGLOG : "入場紀錄"
-    PARKINGSPACE ||--|{ PARKINGLOG : "佔用"
+
+    VEHICLE {
+        string plate_number PK
+        string user_id FK
+        string model
+        string color
+        enum type "Car, Motorcycle, Electric"
+        boolean has_disabled_permit "是否具身障資格"
+    }
+
+    PARKING_SLOT {
+        int slot_id PK
+        string area_zone "如：A區, B區"
+        enum slot_type "Regular, Disabled, EV, StaffOnly"
+        enum status "Available, Occupied, Reserved, Maintenance"
+        float coordinate_x
+        float coordinate_y
+    }
+
+    IOT_SENSOR {
+        string sensor_id PK
+        int slot_id FK
+        enum sensor_type "Ultrasonic, Magnetic"
+        datetime last_heartbeat "最後在線時間"
+        float battery_level
+    }
+
+    RESERVATION {
+        int reservation_id PK
+        string user_id FK
+        int slot_id FK
+        datetime start_time
+        datetime end_time
+        string qr_token "加密後的QR內容"
+        enum status "Pending, Confirmed, Cancelled, Completed"
+    }
+
+    PARKING_LOG {
+        int log_id PK
+        string plate_number FK
+        int slot_id FK
+        datetime entry_time
+        datetime exit_time
+        float duration_minutes
+    }
+
+    PAYMENT {
+        int payment_id PK
+        int log_id FK
+        decimal amount
+        enum method "LinePay, CreditCard, Balance"
+        datetime payment_time
+        boolean is_success
+    }
+
+    VIOLATION {
+        int violation_id PK
+        int log_id FK
+        string plate_number FK
+        enum violation_type "Unauthorized_Occupancy, Overtime"
+        string evidence_image_url "影像截圖路徑"
+        datetime timestamp
+        boolean is_processed
+    }
+
+    VISITOR_PASS {
+        int pass_id PK
+        string user_id FK "申請人ID"
+        string visitor_name
+        string plate_number
+        datetime valid_from
+        datetime valid_to
+        string qr_code_path
+    }
 ```
 
 
@@ -342,62 +415,48 @@ flowchart TB
 ```
 
 
-
-
-## 🧪 測試與驗收
-- 單元測試：API、AI 模型準確率
-- 系統測試：入退場流程、車位同步
-- 效能測試：高峰期壓力測試
-- UAT：實際校園測試，使用者回饋
-
----
-
-
 ---
 
 # 📎 專案目錄
 ```bash
 CampusParkingSystem/
-├─ backend/
-├─ frontend/
-├─ ai-recognition/
-├─ docs/
-└─ infra/
+├─ src/
+│  ├─ Parking.Api/                  # 表現層 (Presentation Layer - RESTful API)
+│  │  ├─ Controllers/               # 車位查詢、預約、訪客申請、違規申訴 API
+│  │  ├─ Filters/                   # 權限驗證 (JWT/RBAC)、例外處理
+│  │  ├─ Middleware/                # 請求日誌記錄、效能監控
+│  │  └─ Program.cs                 # 進入點與相依性注入 (DI) 配置
+│  │
+│  ├─ Parking.Application/          # 應用服務層 (Application Service Layer)
+│  │  ├─ Interfaces/                # 定義 Repository、AI 辨識、通知服務介面
+│  │  ├─ Services/                  # 停車計費引擎、預約排程邏輯、違規判定邏輯
+│  │  ├─ DTOs/                      # Data Transfer Objects (Request/Response)
+│  │  └─ Validators/                # FluentValidation (例如：車牌格式檢查)
+│  │
+│  ├─ Parking.Domain/               # 核心領域層 (Core Domain Layer)
+│  │  ├─ Entities/                  # Vehicle, ParkingSlot, User, ViolationRecord
+│  │  ├─ Enums/                     # SlotStatus (Available, Occupied, Reserved)
+│  │  ├─ ValueObjects/              # PlateNumber, Money, GeoLocation
+│  │  └─ DomainEvents/              # 定義事件：如「車輛非法闖入」、「車位已滿」
+│  │
+│  ├─ Parking.Infrastructure/       # 基礎設施層 (Infrastructure Layer)
+│  │  ├─ DbContexts/                # EF Core / Prisma 資料庫上下文
+│  │  ├─ Repositories/              # 資料庫實作 (SQL Server/PostgreSQL)
+│  │  ├─ ExternalServices/          # 第三方整合：LINE Notify, Firebase Auth
+│  │  └─ AI_OCR/                    # YOLOv8/v11 模型封裝與影像預處理實作
+│  │
+│  ├─ Parking.EdgeDevice/           # 邊緣運算與 IoT 控制 (Raspberry Pi/Jetson)
+│  │  ├─ GateControl/               # GPIO 控制閘門升降程式碼
+│  │  ├─ SensorPolling/             # 超音波/地磁感測器數據採集 (MQTT)
+│  │  └─ CameraStream/              # RTSP 影像串流與截圖傳送
+│  │
+│  └─ Parking.Dashboard/            # 管理前端 (Web/Mobile)
+│     ├─ src/components/            # 實時車位 2D 地圖、視覺化報表
+│     └─ src/store/                 # 狀態管理 (Vuex/Redux)
+│
+└─ docs/                            # 專案開發文件
+   ├─ architecture/                 # 系統架構圖、ERD、Sequence Diagrams
+   ├─ api_spec/                     # Swagger / Postman Collection
+   └─ deployment/                   # Dockerfile & Docker-compose 配置
 ```
-
-
-
-
-
-
-
-
-
-
-## 🔁 系統整體流程圖
-
-```mermaid
-flowchart TD
-    Start([進入停車場服務]) --> Choice{用戶身份}
-    Choice --> Student[學生 / 教職員註冊車牌]
-    Choice --> Visitor[訪客線上申請]
-
-    Student --> Reserve[預約車位]
-    Visitor --> ApplyQR[申請 QR 通行]
-
-    Reserve --> Arrive[抵達校園]
-    ApplyQR --> Arrive
-
-    Arrive --> GateScan[車牌 / QR 掃描]
-    GateScan --> Check[資格比對]
-
-    Check -->|合法| Enter[開閘進場]
-    Check -->|不合法| Alert[違規警示/蒐證]
-
-    Enter --> ParkStatus[車位狀態更新]
-    ParkStatus --> End([成功停車])
-    Alert --> EndAlert([管理員審查])
-```
-
----
 
