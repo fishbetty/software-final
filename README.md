@@ -247,25 +247,6 @@ erDiagram
 
 ---
 
-### 🛜 車位預約系統
-
-* 提供學生與教職員提前預約車位
-* app / web 即時顯示剩餘車位
-* 可設定保留時間，若超時未入場則取消
-* 支援臨停與長期配額車位
-* 流程：選車位 → 設定時間 → QR 入場驗證
-
-```mermaid
-sequenceDiagram
-User ->> Web/App: 選擇日期與停車位
-Web/App ->> Backend: 建立預約
-Backend ->> DB: 紀錄預約資訊
-Car ->> Gate: 抵達校園
-Gate ->> Backend: 驗證預約
-Backend -->> Gate: 放行 / 駁回
-```
-
----
 
 ### 🎫 QR Code 訪客驗證
 
