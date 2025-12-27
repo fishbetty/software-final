@@ -180,7 +180,7 @@ T --> END[結束流程]
 
 ## 📂 資料庫 ER Model 
 
-```
+```mermaid
 erDiagram
     USER ||--o{ VEHICLE : "擁有"
     VEHICLE ||--o{ PARKING_LOG : "進出紀錄"
