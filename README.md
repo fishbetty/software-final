@@ -45,6 +45,76 @@
 
 ---
 
+#🧱 整體系統架構圖（System Architecture Diagram）
+
+```mermaid
+graph LR
+
+subgraph ClientLayer[使用者端 / Client Layer]
+    U1[手機 App]
+    U2[Web 介面]
+    U3[管理後台系統]
+end
+
+subgraph APILayer[後端應用服務層 / API & Service Layer]
+    A1[身份驗證服務 Auth Service]
+    A2[停車管理服務 Parking Service]
+    A3[車牌辨識服務 OCR Service]
+    A4[資料同步服務 Data Sync Service]
+end
+
+subgraph DomainLayer[商業邏輯 / Domain Layer]
+    D1[車輛進出邏輯 VehicleRecord]
+    D2[停車格管理 Slot Management]
+    D3[費率計算 Fee Policy]
+end
+
+subgraph IoTLayer[感測層 / IoT & Edge Layer]
+    I1[地磁感測器]
+    I2[超音波感測器]
+    I3[影像辨識相機]
+    I4[閘門控制器]
+end
+
+subgraph DataLayer[資料層 / Entity & DB]
+    DB1[(停車區資料 ParkingSlots DB)]
+    DB2[(車輛紀錄資料 VehicleRecords DB)]
+    DB3[(使用者 & 權限 Users DB)]
+end
+
+%% Client <-> API
+U1 -->|REST API / WebSocket| APILayer
+U2 -->|REST API| APILayer
+U3 -->|管理控制 & 報表| APILayer
+
+%% API to DB
+APILayer -->|CRUD| DataLayer
+
+%% Service to Domain Logic
+APILayer --> DomainLayer
+
+%% IoT reporting
+IoTLayer -->|MQTT/WebSocket| A4
+
+%% Parking logic
+A2 --> D2
+A2 --> D1
+A2 --> D3
+
+%% OCR interaction
+A3 --> I3
+
+%% Gate signals
+A2 --> I4
+
+```
+
+---
+
+
+
+
+
 # 🏗️ 系統架構 System Architecture
 
 ```mermaid
@@ -124,73 +194,6 @@ T --> END[結束流程]
 * 重複占位或超時 → 系統警告
 
 ---
-
-# 📂 流程
-
-```mermaid
-graph LR
-
-subgraph ClientLayer[使用者端 / Client Layer]
-    U1[手機 App]
-    U2[Web 介面]
-    U3[管理後台系統]
-end
-
-subgraph APILayer[後端應用服務層 / API & Service Layer]
-    A1[身份驗證服務 Auth Service]
-    A2[停車管理服務 Parking Service]
-    A3[車牌辨識服務 OCR Service]
-    A4[資料同步服務 Data Sync Service]
-end
-
-subgraph DomainLayer[商業邏輯 / Domain Layer]
-    D1[車輛進出邏輯 VehicleRecord]
-    D2[停車格管理 Slot Management]
-    D3[費率計算 Fee Policy]
-end
-
-subgraph IoTLayer[感測層 / IoT & Edge Layer]
-    I1[地磁感測器]
-    I2[超音波感測器]
-    I3[影像辨識相機]
-    I4[閘門控制器]
-end
-
-subgraph DataLayer[資料層 / Entity & DB]
-    DB1[(停車區資料 ParkingSlots DB)]
-    DB2[(車輛紀錄資料 VehicleRecords DB)]
-    DB3[(使用者 & 權限 Users DB)]
-end
-
-%% Client <-> API
-U1 -->|REST API / WebSocket| APILayer
-U2 -->|REST API| APILayer
-U3 -->|管理控制 & 報表| APILayer
-
-%% API to DB
-APILayer -->|CRUD| DataLayer
-
-%% Service to Domain Logic
-APILayer --> DomainLayer
-
-%% IoT reporting
-IoTLayer -->|MQTT/WebSocket| A4
-
-%% Parking logic
-A2 --> D2
-A2 --> D1
-A2 --> D3
-
-%% OCR interaction
-A3 --> I3
-
-%% Gate signals
-A2 --> I4
-
-```
-
----
-
 
 
 ## 📂 資料庫 ER Model (簡化版)
