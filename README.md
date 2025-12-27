@@ -183,23 +183,45 @@ T --> END[結束流程]
 ## 📂 資料庫 ER Model 
 
 ```mermaid
-CampusParking/
-├─ src/
-│  ├─ Parking.Web/              # 前端 UI (Vue 或 React)
-│  │  └─ 包含：車位地圖、使用者預約介面、管理後台
-│  │
-│  ├─ Parking.Server/           # 後端 API 主程式 (Node.js / Python / C#)
-│  │  ├─ Controllers/           # 接收請求 (如：進場、出場、查詢)
-│  │  ├─ Services/              # 業務邏輯 (如：計費公式、違規自動判定)
-│  │  └─ Models/                # 資料庫對應物件 (Entity)
-│  │
-│  ├─ Parking.AI/               # AI 辨識模組
-│  │  └─ 包含：車牌辨識 (OCR)、違規截圖自動上傳功能
-│  │
-│  └─ Parking.Infrastructure/   # 基礎設施
-│     └─ 包含：資料庫連接、LINE/Email 通知發送
-│
-└─ docs/                        # 報告文件 (ERD, 流程圖, 測試紀錄)
+erDiagram
+    USER ||--o{ VEHICLE : "擁有"
+    VEHICLE ||--o{ PARKING_LOG : "進出紀錄"
+    PARKING_SLOT ||--o{ PARKING_LOG : "使用"
+    VEHICLE ||--o{ VIOLATION : "違規紀錄"
+
+    USER {
+        string user_id PK
+        string name
+        enum role "教職員/學生/訪客"
+    }
+
+    VEHICLE {
+        string plate PK
+        string user_id FK
+        boolean is_disabled "是否身障車"
+    }
+
+    PARKING_SLOT {
+        int slot_id PK
+        enum type "一般/身障/電動"
+        enum status "空位/佔用/預約"
+    }
+
+    PARKING_LOG {
+        int log_id PK
+        string plate FK
+        int slot_id FK
+        datetime in_time
+        datetime out_time
+        decimal fee "停車費用"
+    }
+
+    VIOLATION {
+        int violation_id PK
+        string plate FK
+        string photo_url "違規證據圖"
+        string reason "如：佔用身障位"
+    }
 ```
 
 
